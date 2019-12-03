@@ -5,8 +5,10 @@
 
 *c = vecteur colonne binaire de taille [1,N] -> mot de code en entrée
 H = matrice de taille [M,N] binaire (true et false)
-MAX_ITER : transparent
-sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du décodage*
+MAX_ITER : transparent*
+
+
+*sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du décodage*
 
 * **Première étape :** on crée un vecteur de taille N qui représente les valeurs des tests de parité.<br/>
 	parity(i) = 1 si le test de parité du c_node i est faux,<br/>
