@@ -4,7 +4,7 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
     %%%
     %c = vecteur colonne binaire de taille [1,N] -> mot de code en entrée
     %H = matrice de taille [M,N] binaire (true et false)
-    %MAX_ITER : transparent
+    %MAX_ITER : nombre maximal d'itérations
     %
     %sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du décodage
     %%%
