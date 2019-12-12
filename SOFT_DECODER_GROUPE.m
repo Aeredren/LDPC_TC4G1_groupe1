@@ -34,27 +34,23 @@ while(nIter <= MAX_ITER & mod(sum(c_cor),2) ==1)
     end
     
     
-    
-             
-           
-           
-         
-             
-            
-            
-            
-      
-            
-           
-            
-           
+    for i = 1:n
+        %for jprime = setdiff(1:L,j)
+        produit4 = (produit4*(R1(j;i)));
+        produit5 = (produit5*(1 - R1(j;i)));
+        end
         
-
-    
-
-
-
-
-
+        q0 = (1 - (p[i] * produit5));
+        Q1(i;j) = p[i] * produit4;
+        
+        if Q1>q0;
+      
+           c_cor(i)=1;
+        else
+            c_cor(i)=0;
+            
+        nIter = nIter+1;
+           
+          
   
 endfunction
