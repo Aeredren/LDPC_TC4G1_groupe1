@@ -9,6 +9,9 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
     %sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du dÃ©codage
     %%%
     
+    %Entrées = colonnes. On transpose le tout.
+    c = c';
+    
    	sizeMatrix = size(H);
     nCheckNodes = sizeMatrix(1); %Il y a autant de checknodes que de lignes dans H
     nVariableNodes = sizeMatrix(2); %Il y a autant de variablenodes que de colonnes dans H
