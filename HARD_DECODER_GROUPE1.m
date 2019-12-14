@@ -9,7 +9,7 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
     %sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du dÃ©codage
     %%%
     
-    %Entrées = colonnes. On transpose le tout.
+    %Entrées = colonnes. On transpose le tout. (sinon erreur ligne 31)
     c = c';
     
    	sizeMatrix = size(H);
@@ -56,7 +56,10 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
         end
         nIter = nIter + 1;
     end
-    
+       
+    %On transpose une dernière fois c_cor afin de correspondre à la
+    %signature demandée
+    c_cor = c_cor';
     return;
     
 end
