@@ -23,7 +23,11 @@ function c_cor = SOFT_DECODER_GROUPE1(c,H,p,MAX_ITER)
     
     R1 = zeros(nCheckNodes,nVariableNodes);
     %Q1 est la matrice contenant les messages des c_nodes au v_nodes
-    %messages du v_node i-> c_node j (R(i,j) = rij(1))    
+    %messages du c_node j-> v_node i (R(j,i) = rji(1))    
+    
+    %On fera varier i et j de mani�res � ce que :
+    %   - i repr�sente les v_nodes
+    %   - j repr�sente les c_nodes
     
     produit1 = 1;
     produit2 = 1;
@@ -43,53 +47,53 @@ function c_cor = SOFT_DECODER_GROUPE1(c,H,p,MAX_ITER)
         %TANT QUE : Max_iter pas dépassé et test de parité faux
         
         %Calcul des messages envoyés des c_nodes aux v_nodes
-        for i = 1:nCheckNodes
-            for j = 1:nVariableNodes
-                if H(i,j) == 1
+        for j = 1:nCheckNodes
+            for i = 1:nVariableNodes
+                if H(j,i) == 1
                     produit1 = 1;
-                    for jprime = setdiff(1:nVariableNodes,j)
-                        produit1 = produit1 * (1-2*Q1(jprime,i));
+                    for iprime = setdiff(1:nVariableNodes,i)
+                        produit1 = produit1 * (1-2*Q1(iprime,j));
                     end
-                    R1(i,j) = (1 - (0.5 + (0.5 * produit1)));
+                    R1(j,i) = 1 - (0.5 + 0.5 * produit1);
                 end
             end
         end
         
         %Calcul des messages envoyés des v_nodes aux c_nodes
-        for j = 1:nVariableNodes
-            for i = 1:nCheckNodes
-                if H(i,j) == 1
+        for i = 1:nVariableNodes
+            for j = 1:nCheckNodes
+                if H(j,i) == 1
                     produit1 = 1;
                     produit2 = 1;
-                    for iprime = setdiff(1:nCheckNodes,i)
-                       produit1 = produit1 * (R1(iprime,j));
-                       produit2 = produit2 * (1 - R1(iprime,j));
+                    for jprime = setdiff(1:nCheckNodes,j)
+                       produit1 = produit1 * (R1(jprime,i));
+                       produit2 = produit2 * (1 - R1(jprime,i));
                     end
-                    Q1(j,i) = p(j) * produit1;
+                    Q1(i,j) = p(i) * produit1;
                     %Calcul de qij(0), nécessaire pour pondérer la valeur 
                     %calculée au dessus
-                    q0 = (1 - (p(j) * produit2));
-                    Q1(j,i) = (Q1(j,i)/(Q1(j,i) + q0));
+                    q0 = (1 - p(i)) * produit2;
+                    Q1(i,j) = (Q1(i,j)/(Q1(i,j) + q0));
                 end
             end
         end
 
         %Calcul des probabilités pour la détection
-        for j = 1:nVariableNodes
+        for i = 1:nVariableNodes
             produit1 = 1;
             produit2 = 1;
-            for i = 1:nCheckNodes
-                if H(i,j) == 1
-                   produit1 = produit1 * (R1(i,j));
-                   produit2 = produit2 * (1 - R1(i,j));
+            for j = 1:nCheckNodes
+                if H(j,i) == 1
+                    produit1 = produit1 * (R1(j,i));
+                    produit2 = produit2 * (1 - R1(j,i));
                 end
             end
-            q1 = p(j) * produit1;
-            q0 = (1 - (p(j) * produit2));
+            q1 = p(i) * produit1;
+            q0 = (1 - p(i)) * produit2;
             if q1 > q0
-                c_cor(j) = 1;
+                c_cor(i) = 1;
             else
-                c_cor(j) = 0;
+                c_cor(i) = 0;
             end
         end
         
