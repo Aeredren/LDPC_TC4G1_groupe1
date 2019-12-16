@@ -9,7 +9,7 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
     %sortie : c_cor : vecteur colonne binaire de taille [1,N] issu du décodage
     %%%
     
-    %Entr�es = colonnes. On transpose le tout. (sinon erreur ligne 31)
+    %Entr�es = colonnes. On transpose le tout. (sinon erreur ligne 31)
     c = c';
     
    	sizeMatrix = size(H);
@@ -21,12 +21,17 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
     c_cor = c; %Vecteur sortie
     nIter = 1; %Nombre d'itérations (ne doit pas dépasser MAX_ITER)
     
-    majority = (sum(H(:,1)) + 1) / 2;
+    majority = zeros(nCheckNodes,1);
     %Lors de l'addition des valeurs retournées par les c nodes
-    %dans chaque v node, majority est la valeur que cette somme doit
+    %dans chaque v node j, majority(j) est la valeur que cette somme doit
     %dépasser pour que l'on passe la valeur du bit concerné à 1.
-    %
-    %Cette valeur reste la même pour chaque v_node voir 1.2 dans le papier
+    %Les matrices pouvant être irrégulières, il faut calculer majority pour
+    %chaque v_node !
+    
+    for j = 1:nVariableNodes
+       majority(j) = (sum(H(:,j)) + 1) / 2; 
+    end
+    
     
     while (nIter <= MAX_ITER && mod(sum(c_cor),2) == 1)
         %TANT QUE : Max_iter pas dépassé et test de parité faux
@@ -48,7 +53,7 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
             end
             %Si nOnes > majority : le v_node a reçu plus de 1 que de 0, il
             %faut donc passer sa valeur à 1. 0 sinon.
-            if nOnes > majority
+            if nOnes > majority(j)
                 c_cor(j) = 1;
             else
                 c_cor(j) = 0;
@@ -57,8 +62,8 @@ function c_cor = HARD_DECODER_GROUPE1(c,H,MAX_ITER)
         nIter = nIter + 1;
     end
        
-    %On transpose une derni�re fois c_cor afin de correspondre � la
-    %signature demand�e
+    %On transpose une derni�re fois c_cor afin de correspondre � la
+    %signature demand�e
     c_cor = c_cor';
     return;
     
